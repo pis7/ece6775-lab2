@@ -1,1 +1,4 @@
+*.prj/
 result/
+out.dat
+*.log

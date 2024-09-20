@@ -60,9 +60,14 @@ void update_knn(digit test_inst, digit train_inst,
     dist += diff[i];
   }
 
-  // -----------------------------
-  // YOUR CODE GOES HERE
-  // -----------------------------
+  // Get index of max in array
+  bit4 max_idx = 0;
+  for (int i = 1; i < K_CONST; i++) {
+    if (min_distances[i] > min_distances[max_idx]) max_idx = i;
+  }
+
+  // Replace prev max with new value if is less than max in array
+  if (min_distances[max_idx] > dist) min_distances[max_idx] = dist;
 }
 
 
@@ -123,7 +128,30 @@ bit4 knn_vote(bit6 knn_set[10][K_CONST]) {
 
   sort_knn(knn_set, sorted_distances, sorted_labels);
 
-  // -----------------------------
-  // YOUR CODE GOES HERE
-  // -----------------------------
+  // Get frequencies of first K_CONST distances in sorted_distances
+  // Frequency algorithm reference: https://www.geeksforgeeks.org/count-frequencies-elements-array-o1-extra-space-time/
+  bit4 label_freq[K_CONST];
+  for (int i = 0; i < K_CONST; i++) {
+    label_freq[i] = -1;
+  }
+  
+  bit4 local_cnt = 1;
+  for (int i = 0; i < K_CONST; i++) {
+    local_cnt = 1;
+    for (int j = i + 1; j < K_CONST; j++) {
+      if (sorted_labels[i] == sorted_labels[j]) {
+        local_cnt++;
+        label_freq[j] = 0; // Already accounted for this frequency
+      }
+    }
+    if (label_freq[i] != 0) label_freq[i] = local_cnt;
+  }
+
+  // Get label with highest frequency in array
+  int max_freq_label = 0;
+  for (int i = 1; i < 10; i++) {
+    if (label_freq[i] > label_freq[max_freq_label]) max_freq_label = i;
+  }
+
+  return max_freq_label;
 }

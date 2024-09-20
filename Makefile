@@ -15,7 +15,7 @@ VHLS_INC=$(XILINX_VIVADO)/include
 # Specify compilation flags
 CFLAGS=-g -I${VHLS_INC}
 
-K_VALUES=3
+K_VALUES=1 2 3
 # TIP: You can add multiple values of K: just add a space between values like so:
 # K_VALUES=1 2 3 4 5
 
