@@ -129,7 +129,7 @@ bit4 knn_vote(bit6 knn_set[10][K_CONST]) {
   sort_knn(knn_set, sorted_distances, sorted_labels);
 
   // Get frequencies of first K_CONST distances in sorted_distances
-  // Frequency algorithm reference: https://www.geeksforgeeks.org/count-frequencies-elements-array-o1-extra-space-time/
+  // Frequency algorithm reference: https://www.w3resource.com/c-programming-exercises/array/c-array-exercise-8.php
   bit4 label_freq[K_CONST];
   for (int i = 0; i < K_CONST; i++) {
     label_freq[i] = -1;
