@@ -129,23 +129,10 @@ bit4 knn_vote(bit6 knn_set[10][K_CONST]) {
   sort_knn(knn_set, sorted_distances, sorted_labels);
 
   // Get frequencies of first K_CONST distances in sorted_distances
-  // Frequency algorithm reference: https://www.w3resource.com/c-programming-exercises/array/c-array-exercise-8.php
-  bit4 label_freq[K_CONST];
-  for (int i = 0; i < K_CONST; i++) {
-    label_freq[i] = -1;
-  }
-  
-  bit4 local_cnt = 1;
-  for (int i = 0; i < K_CONST; i++) {
-    local_cnt = 1;
-    for (int j = i + 1; j < K_CONST; j++) {
-      if (sorted_labels[i] == sorted_labels[j]) {
-        local_cnt++;
-        label_freq[j] = 0; // Already accounted for this frequency
-      }
-    }
-    if (label_freq[i] != 0) label_freq[i] = local_cnt;
-  }
+  // Frequency algorithm reference: https://www.geeksforgeeks.org/count-frequencies-elements-array-o1-extra-space-time/
+  bit4 freqs[10];
+  for (int i = 0; i < 10; i++) freqs[i] = 0;
+  for (int i = 0; i < K_CONST; i++) freqs[sorted_labels[i]]++;
 
   // Get label with highest frequency in array
   int max_freq_label = 0;
