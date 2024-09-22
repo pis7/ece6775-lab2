@@ -129,16 +129,29 @@ bit4 knn_vote(bit6 knn_set[10][K_CONST]) {
   sort_knn(knn_set, sorted_distances, sorted_labels);
 
   // Get frequencies of first K_CONST distances in sorted_distances
-  // Frequency algorithm reference: https://www.geeksforgeeks.org/count-frequencies-elements-array-o1-extra-space-time/
-  bit4 freqs[10];
-  set_zero: for (int i = 0; i < 10; i++) freqs[i] = 0;
-  get_freqs: for (int i = 0; i < K_CONST; i++) freqs[sorted_labels[i]]++;
-
-  // Get label with highest frequency in array
-  int max_freq_label = 0;
-  search_max: for (int i = 1; i < 10; i++) {
-    if (freqs[i] > freqs[max_freq_label]) max_freq_label = i;
+  // Frequency algorithm reference: https://www.w3resource.com/c-programming-exercises/array/c-array-exercise-8.php
+  bit4 freqs[K_CONST];
+  freqs_init: for (int i = 0; i < K_CONST; i++) {
+    freqs[i] = -1;
+  }
+  
+  bit4 local_cnt = 1;
+  get_freqs_outer: for (int i = 0; i < K_CONST; i++) {
+    local_cnt = 1;
+    get_freqs_inner: for (int j = i + 1; j < K_CONST; j++) {
+      if (sorted_labels[i] == sorted_labels[j]) {
+        local_cnt++;
+        freqs[j] = 0; // Already accounted for this frequency
+      }
+    }
+    if (freqs[i] != 0) freqs[i] = local_cnt;
   }
 
-  return max_freq_label;
+  // Get label with highest frequency in array
+  bit4 max_idx = 0;
+  search_max: for (int i = 1; i < K_CONST; i++) {
+    if (freqs[i] > freqs[max_idx]) max_idx = i;
+  }
+
+  return sorted_labels[max_idx];
 }

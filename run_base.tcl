@@ -28,7 +28,7 @@ foreach { K } $value_k {
 set CFLAGS "-DK_CONST=${K}"
 
 # Project name
-set hls_prj ${K}-nn.prj
+set hls_prj ${K}-nn-base.prj
 
 # Open/reset the project
 open_project ${hls_prj} -reset

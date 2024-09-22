@@ -28,7 +28,7 @@ foreach { K } $value_k {
 set CFLAGS "-DK_CONST=${K}"
 
 # Project name
-set hls_prj ${K}-nn.prj
+set hls_prj ${K}-nn-opt.prj
 
 # Open/reset the project
 open_project ${hls_prj} -reset
@@ -60,8 +60,9 @@ set_directive_unroll sort_knn/flatten_outer
 set_directive_unroll sort_knn/flatten_inner
 set_directive_unroll sort_knn/bubble_outer
 set_directive_unroll sort_knn/bubble_inner
-set_directive_unroll knn_vote/set_zero
-set_directive_unroll knn_vote/get_freqs
+set_directive_unroll knn_vote/freqs_init
+set_directive_unroll knn_vote/get_freqs_outer
+set_directive_unroll knn_vote/get_freqs_inner
 set_directive_unroll knn_vote/search_max
 
 set_directive_array_partition -type complete -dim 0 digitrec knn_set
