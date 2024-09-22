@@ -12,13 +12,13 @@
 #------------------------------------------------------
 # Remove old result file
 #------------------------------------------------------
-set filename "knn_result.csv"
+set filename "knn_result_opt.csv"
 file delete -force "./result/${filename}"
 
 #------------------------------------------------------
 # You can specify a set of parameter K to explore.
 #------------------------------------------------------
-set value_k { 1 2 3 4 5 }
+set value_k {3}
 #------------------------------------------------------
 # run batch experiments
 #------------------------------------------------------
@@ -50,8 +50,25 @@ create_clock -period 10
 # Do not inline update_knn and knn_vote functions 
 set_directive_inline -off update_knn
 set_directive_inline -off knn_vote
-### You can add your own directives here ###
 
+set_directive_unroll digitrec/knn_init_outer
+set_directive_unroll digitrec/knn_init_inner
+set_directive_unroll digitrec/training_inner
+set_directive_unroll update_knn/popcount
+set_directive_unroll update_knn/search_max
+set_directive_unroll sort_knn/flatten_outer
+set_directive_unroll sort_knn/flatten_inner
+set_directive_unroll sort_knn/bubble_outer
+set_directive_unroll sort_knn/bubble_inner
+set_directive_unroll knn_vote/set_zero
+set_directive_unroll knn_vote/get_freqs
+set_directive_unroll knn_vote/search_max
+
+set_directive_array_partition -type complete -dim 0 digitrec knn_set
+set_directive_array_partition -type complete -dim 0 digitrec knn_set
+set_directive_array_partition -type complete -dim 0 knn_vote sorted_distances
+set_directive_array_partition -type complete -dim 0 knn_vote sorted_labels
+set_directive_array_partition -type complete -dim 0 knn_vote freqs
 
 # Simulate the C++ design
 csim_design

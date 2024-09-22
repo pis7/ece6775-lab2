@@ -26,6 +26,7 @@ SW_RESULTS=$(patsubst %,result/digitrec_%-nn_sw_result.txt,$(K_VALUES))
 # Compile & run digitrec implementation
 all: digitrec-sw digitrec-hw
 
+# SW targets ----------------------------
 digitrec_%-nn_tb: digitrec.cpp digitrec_test.cpp
 	g++ ${CFLAGS} -DK_CONST=$* $^ -o $@
 
@@ -35,10 +36,15 @@ result/digitrec_%-nn_sw_result.txt: digitrec_%-nn_tb
 
 digitrec-sw: $(SW_RESULTS)
 
-result/knn_result.csv: run.tcl digitrec.cpp digitrec_test.cpp
+# HW targets ----------------------------
+result/knn_result_%.csv: run_%.tcl digitrec.cpp digitrec_test.cpp
 	$(XIL_HLS) -f $<
 
-digitrec-hw: result/knn_result.csv
+digitrec-base-hw: result/knn_result_base.csv
+
+digitrec-opt-hw: result/knn_result_opt.csv
+
+digitrec-hw: digitrec-base-hw digitrec-opt-hw
 
 # Clean up the directory before submission
 clean:

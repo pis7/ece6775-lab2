@@ -62,7 +62,7 @@ void update_knn(digit test_inst, digit train_inst,
 
   // Get index of max in array
   bit4 max_idx = 0;
-  for (int i = 1; i < K_CONST; i++) {
+  search_max: for (int i = 1; i < K_CONST; i++) {
     if (min_distances[i] > min_distances[max_idx]) max_idx = i;
   }
 
@@ -131,13 +131,13 @@ bit4 knn_vote(bit6 knn_set[10][K_CONST]) {
   // Get frequencies of first K_CONST distances in sorted_distances
   // Frequency algorithm reference: https://www.geeksforgeeks.org/count-frequencies-elements-array-o1-extra-space-time/
   bit4 freqs[10];
-  for (int i = 0; i < 10; i++) freqs[i] = 0;
-  for (int i = 0; i < K_CONST; i++) freqs[sorted_labels[i]]++;
+  set_zero: for (int i = 0; i < 10; i++) freqs[i] = 0;
+  get_freqs: for (int i = 0; i < K_CONST; i++) freqs[sorted_labels[i]]++;
 
   // Get label with highest frequency in array
   int max_freq_label = 0;
-  for (int i = 1; i < 10; i++) {
-    if (label_freq[i] > label_freq[max_freq_label]) max_freq_label = i;
+  search_max: for (int i = 1; i < 10; i++) {
+    if (freqs[i] > freqs[max_freq_label]) max_freq_label = i;
   }
 
   return max_freq_label;
